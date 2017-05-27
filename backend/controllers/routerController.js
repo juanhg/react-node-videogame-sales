@@ -16,4 +16,6 @@ addMainRoute = function (router) {
 addVideogameRoutes = function(router) {
     router.route('/videogames')
         .get(VideogamesController.findAll);
+    router.route('/videogames/:filter')
+        .get(VideogamesController.findByFilter)
 };
