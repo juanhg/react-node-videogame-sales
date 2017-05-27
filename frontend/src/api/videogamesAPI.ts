@@ -18,7 +18,7 @@ class VideogamesAPI {
         success: function (data) {
           var videogames: Array<VideogameEntity>;
           videogames = data.map((videogame) => {
-            return new VideogameEntity(<VideogameEntity>videogame);
+            return new VideogameEntity(<VideogameEntity> videogame);
           });
           resolve(videogames);
         }

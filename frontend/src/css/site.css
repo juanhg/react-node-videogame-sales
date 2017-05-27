@@ -11,18 +11,40 @@
     width: 150px !important;
 }
 
-.member-page {
-    padding-left: 50px;
-    padding-right: 50px;
-}
-
-.about-page {
-    padding-left: 50px;
-    padding-right: 50px;
-}
-
 .btn {
     width: 80px;
 }
 
+.main-container{
+    height: 800px;
+    display: flex;
+    flex-direction: row;
+}
+
+.left-container{
+    width: 360px;
+    float: left;
+    background-color: dodgerblue;
+}
+
+.right-container{
+    float: left;
+    padding-left: 20px;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.shape-block {
+    height: 100%;
+    position: relative;
+}
+
+.shape-block img  {
+    display: block;
+    max-width: 80%;
+    position: absolute;
+    bottom:40px;
+    left:50%;
+    transform:translateX(-50%);
+}
 
