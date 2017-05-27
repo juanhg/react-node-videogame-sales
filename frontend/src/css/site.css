@@ -1,0 +1,28 @@
+/* entry point css */
+
+.image-loader{
+    float: left;
+    width: 150px !important;
+    margin-left: 20px;
+    margin-top: 8px;
+}
+
+.file-input{
+    width: 150px !important;
+}
+
+.member-page {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.about-page {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+.btn {
+    width: 80px;
+}
+
+
