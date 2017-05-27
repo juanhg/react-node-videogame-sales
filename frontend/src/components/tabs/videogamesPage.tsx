@@ -26,18 +26,15 @@ export default class VideogamesPage extends React.Component<Props, State> {
   }
 
   public componentDidMount() {
-    var promise: Q.Promise<VideogameEntity[]> = VideogamesAPI.getAllMembersAsync();
-
-    promise.done(function (videogames) {
+    VideogamesAPI.promiseAll().then(function(videogames){
       this.setState({ 
         videogames: videogames,
         loaded: true 
       });
-    }.bind(this))
+    }.bind(this));
   }
   
-    public render() {
-
+  public render() {
     return (
       <div >
         <h2> Videogames Page</h2>

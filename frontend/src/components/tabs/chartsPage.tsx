@@ -24,19 +24,18 @@ export default class ChartsPage extends React.Component<Props, State> {
 
   // Changing to componentDidMount to handle initial ajax request response
   public componentDidMount() {
-    var promise: Q.Promise<VideogameEntity[]> = VideogamesAPI.getAllMembersAsync();
 
-    promise.done(function (videogames) {
+    VideogamesAPI.promiseAll().then(function (videogames) {
       this.setState({ videogames: videogames.reverse() })
     }.bind(this))
   }
 
   public render() {
-    
+
     return (
       <div className="charts-page">
         <h2> Charts Page</h2>
-        UNDER CONSTRUCTION 
+        UNDER CONSTRUCTION
       </div>
     );
   }
