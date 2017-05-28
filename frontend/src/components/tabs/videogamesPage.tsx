@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 
-import VideogameEntity from '../../api/videogameEntity';
+import VideogameEntity from '../../entities/videogameEntity';
 import VideogamesAPI from '../../api/videogamesAPI';
+import VideogamesTable from '../common/videogamesTable';
 import Toogle from '../common/toogle';
 
 var Loader = require('react-loader'),
@@ -13,9 +14,10 @@ var Loader = require('react-loader'),
 interface Props extends React.Props<VideogamesPage> { }
 
 interface State {
-  filterText: string,
-  filterByName: boolean,
-  filterByGenre: boolean,
+  nameFilter: string,
+  platformFilter: string,
+  genreFilter: string,
+  publisherFilter: string,
   videogames: Array<VideogameEntity>,
   loaded: boolean
 }
@@ -25,9 +27,10 @@ export default class VideogamesPage extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      filterText: "",
-      filterByName: true,
-      filterByGenre: false,
+      nameFilter: "",
+      platformFilter: "",
+      genreFilter: "",
+      publisherFilter: "",
       videogames: [],
       loaded: false
     };
@@ -43,59 +46,111 @@ export default class VideogamesPage extends React.Component<Props, State> {
   }
 
   @autobind
-  public onInputChange(event) {
-    var filter = event.target.value;
-    this.state.filterText = filter;
+  public onFilterChange(event) {
+    var filterId = event.target.name,
+      filter = event.target.value;
+
+    this.updateFilterState(filterId, filter);
     this.setLoading(true);
 
-    VideogamesAPI.promiseFindByFilter(filter).then(function (videogames) {
+    var promise = filter && filterId
+      ? VideogamesAPI.promiseFindByFilter(filterId, filter)
+      : VideogamesAPI.promiseAll();
+
+    promise.then(function (videogames) {
       this.state.videogames = videogames;
       this.setLoading(false);
     }.bind(this))
   }
 
-  @autobind
-  public onToogleChange(event) {
-    this.state.filterByGenre = !this.state.filterByGenre;
-    this.state.filterByName = !this.state.filterByName;
-    this.forceUpdate();    
+  private updateFilterState(filterId, filter) {
+    if (filterId) {
+      switch (filterId.toLowerCase()) {
+        case 'name':
+          this.state.nameFilter = filter;
+          this.state.platformFilter = "";
+          this.state.genreFilter = "";
+          this.state.publisherFilter = "";
+          break;
+        case 'platform':
+          this.state.platformFilter = filter;
+          this.state.nameFilter = "";
+          this.state.genreFilter = "";
+          this.state.publisherFilter = "";
+          break;
+        case 'genre':
+          this.state.genreFilter = filter;
+          this.state.nameFilter = "";
+          this.state.platformFilter = "";
+          this.state.publisherFilter = "";
+          break;
+        case 'publisher':
+          this.state.publisherFilter = filter;
+          this.state.nameFilter = "";
+          this.state.platformFilter = "";
+          this.state.genreFilter = "";
+          break;
+      }
+    }
+    else {
+      this.state.nameFilter = "";
+      this.state.platformFilter = "";
+      this.state.genreFilter = "";
+      this.state.publisherFilter = "";
+    }
   }
 
   @autobind
-  public setLoading(enabled){
+  public setLoading(enabled) {
     this.state.loaded = !enabled;
     this.forceUpdate();
   }
 
-  public render() {
+ //TODO refactor DebounceInputs (loop through collection)
+ public render() {
     return (
       <div className="charts-page">
         <div className="main-container">
           <div className="left-container">
             <DebounceInput
-              className="form-control"
-              value={this.state.filterText}
+              className="form-control videogames-filter"
+              placeholder="Filter by Name"
+              name="Name"
+              value={this.state.nameFilter}
               minLength={2}
               debounceTimeout={300}
-              onChange={this.onInputChange} />
-            <Toogle
-              value={this.state.filterByName}
-              onToogle={this.onToogleChange}
-            />
-            <Toogle
-              value={this.state.filterByGenre}
-              onToogle={this.onToogleChange} />
+              onChange={this.onFilterChange} />
+            <DebounceInput
+              className="form-control videogames-filter"
+              name="Platform"
+              placeholder="Filter by Platform"
+              value={this.state.platformFilter}
+              minLength={2}
+              debounceTimeout={300}
+              onChange={this.onFilterChange} />
+            <DebounceInput
+              className="form-control videogames-filter"
+              name="Genre"
+              placeholder="Filter by Genre"
+              value={this.state.genreFilter}
+              minLength={2}
+              debounceTimeout={300}
+              onChange={this.onFilterChange} />
+            <DebounceInput
+              className="form-control videogames-filter"
+              name="Publisher"
+              placeholder="Filter by Publisher"
+              value={this.state.publisherFilter}
+              minLength={2}
+              debounceTimeout={300}
+              onChange={this.onFilterChange} />
             <div className="shape-block">
               <img className="shape" src={logo} />
             </div>
           </div>
           <div className="right-container">
             <Loader loaded={this.state.loaded}>
-              {
-                this.state.videogames.map((videogame: VideogameEntity) =>
-                  <div> {videogame.Name} </div>
-                )
-              }
+              <VideogamesTable videogames={this.state.videogames} />
             </Loader>
           </div>
         </div>

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import VideogameEntity from '../../api/videogameEntity';
+import VideogameEntity from '../../entities/videogameEntity';
 import VideogamesAPI from '../../api/videogamesAPI';
 
 var autobind = require('autobind-decorator'),
-    logo = require('../../../resources/images/logo.png');
+  logo = require('../../../resources/images/logo.png');
 
 interface Props extends React.Props<ChartsPage> { }
 

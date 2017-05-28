@@ -1,7 +1,25 @@
-# react-node-videogame-sales
+React-Node Videogame Sales
+--------------------------------
 
-# To import the csv file as a collection
-mongoimport -d videogamesdb -c videogames --type csv --file vgsales.csv --headerline
+REQUIRES
 
-#Init mongdb
-Execute init.bat
+Node.js should be installed in your system.
+
+MongoDB should be installed in your system.
+
+
+INSTALL
+
+Create videogames mongodb collection: mongoimport -d videogamesdb -c videogames --type csv --file vgsales.csv --headerline
+
+npm install
+
+RUN 
+
+Run mongodb: mongodb
+
+Run the server: node server.js
+
+Run start script: npm start 
+
+Open http://localhost:8080/ in your browser

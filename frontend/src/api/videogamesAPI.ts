@@ -1,6 +1,6 @@
 import * as $ from 'jquery';
 import * as Q from 'q';
-import VideogameEntity from './videogameEntity';
+import VideogameEntity from '../entities/videogameEntity';
 
 var Promise = require('es6-promise');
 
@@ -12,8 +12,12 @@ class VideogamesAPI {
     return this.resolveGetPromise(this.rootPath);
   };
 
-  promiseFindByFilter(filter) {
-    var url = this.rootPath + '/' + filter;
+  promiseFindByFilter(filterId, filter) {
+    var url = '{root}/{filterId}/{filter}'
+      .replace('{root}', this.rootPath)
+      .replace('{filterId}', filterId.toLowerCase())
+      .replace('{filter}', filter);
+    
     return this.resolveGetPromise(url);
   };
 

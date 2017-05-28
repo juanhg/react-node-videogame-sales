@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "dependencies": {
     "body-parser": "^1.17.2",
+    "es6-promise": "^4.1.0",
+    "es6-promises": "^1.0.10",
     "express": "^4.15.3",
     "method-override": "^2.3.9",
     "mongoose": "^4.10.2"

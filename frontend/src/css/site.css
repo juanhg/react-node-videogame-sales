@@ -31,6 +31,7 @@
 .right-container{
     float: left;
     padding-left: 20px;
+    padding-right: 20px;
     width: 100%;
     overflow-y: scroll;
 }
@@ -44,12 +45,19 @@
     display: block;
     position: absolute;
     max-width: 100%;
-    bottom:40px;
+    bottom:0px;
     left:50%;
-    transform:translateX(-50%);
+    transform:translate(-50%, -50%);
 }
 
 .toogle-button {
     padding-top: 25px;
 }
 
+.name-column {
+    width: 400px;
+}
+
+.videogames-filter {
+    margin-top: 25px;
+}
