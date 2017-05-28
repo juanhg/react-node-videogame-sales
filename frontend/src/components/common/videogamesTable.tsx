@@ -13,7 +13,7 @@ export default class VideogamesTable extends React.Component<Props, {}> {
   public render() {
 
     return (
-      <div className="panel panel-default">
+      <div className="panel panel-default videogames-table">
         <table className="table table-hover table-responsive table-bordered">
           <thead>
             <tr>
