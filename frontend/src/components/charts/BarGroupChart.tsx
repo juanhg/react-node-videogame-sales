@@ -29,8 +29,8 @@ var width = 700,
     return d.Name;
   },
   xScale = 'ordinal',
-  xLabel = "Games",
-  yLabel = "Sales";
+  xLabel = 'Games',
+  yLabel = 'Sales';
 
 
 interface Props extends React.Props<BarGroupChart> {
