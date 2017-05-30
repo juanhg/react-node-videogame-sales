@@ -10,7 +10,7 @@ MongoDB should be installed in your system.
 
 INSTALL
 
-Create videogames mongodb collection: mongoimport -d videogamesdb -c videogames --type csv --file vgsales.csv --headerline
+Create videogames mongodb collection: mongoimport -d videogamesdb -c videogames --type csv --file vgsales-clean.csv --headerline
 
 npm install
 

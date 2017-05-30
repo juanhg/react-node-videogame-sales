@@ -16,7 +16,7 @@ exports.findAll = function (req, response) {
 
 
 exports.findByName = function (req, response) {
-     console.log("findByName")
+    console.log("findByName")
 
     var filter = req.params.filter;
     Videogame.find({ "Name": { "$regex": filter, "$options": "i" } }, function (error, videogames) {
@@ -49,4 +49,43 @@ exports.findByGenre = function (req, response) {
     Videogame.find({ "Genre": { "$regex": filter, "$options": "i" } }, function (error, videogames) {
         handler.handleResponse(response, videogames, error);
     });
+}
+
+exports.groupByPlatform = function (req, response) {
+    Videogame.aggregate(
+        [{
+            "$group": {
+                _id: "$Platform",
+                Global_Sales: { "$sum": "$Global_Sales" }
+            }
+        }],
+        function (error, videogames) {
+            handler.handleResponse(response, videogames, error);
+        });
+}
+
+exports.groupByPublisher = function (req, response) {
+    Videogame.aggregate(
+        [{
+            "$group": {
+                _id: "$Publisher",
+                Global_Sales: { "$sum": "$Global_Sales" }
+            }
+        }],
+        function (error, videogames) {
+            handler.handleResponse(response, videogames, error);
+        });
+}
+
+exports.groupByGenre = function (req, response) {
+    Videogame.aggregate(
+        [{
+            "$group": {
+                _id: "$Genre",
+                Global_Sales: { "$sum": "$Global_Sales" }
+            }
+        }],
+        function (error, videogames) {
+            handler.handleResponse(response, videogames, error);
+        });
 }

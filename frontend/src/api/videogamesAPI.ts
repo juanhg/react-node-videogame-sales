@@ -17,7 +17,12 @@ class VideogamesAPI {
       .replace('{root}', this.rootPath)
       .replace('{filterId}', filterId.toLowerCase())
       .replace('{filter}', filter);
-    
+
+    return this.resolveGetPromise(url);
+  };
+
+  promiseGroupByGenre() {
+    var url = '{root}/group/genre'.replace('{root}', this.rootPath);
     return this.resolveGetPromise(url);
   };
 
