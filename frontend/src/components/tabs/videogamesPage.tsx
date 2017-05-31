@@ -13,13 +13,19 @@ var Loader = require('react-loader'),
 
 interface Props extends React.Props<VideogamesPage> { }
 
+
+
 interface State {
   nameFilter: string,
   platformFilter: string,
   genreFilter: string,
   publisherFilter: string,
   videogames: Array<VideogameEntity>,
-  loaded: boolean
+  loaded: boolean,
+  salesByGenre: Array<VideogameEntity>,
+  selector: string,
+  groupSelector: string,
+  selectedChart: string
 }
 
 export default class VideogamesPage extends React.Component<Props, State> {
@@ -32,35 +38,45 @@ export default class VideogamesPage extends React.Component<Props, State> {
       genreFilter: "",
       publisherFilter: "",
       videogames: [],
-      loaded: false
+      loaded: false,
+      salesByGenre: [],
+      selector: "one",
+      selectedChart: "Basic",
+      groupSelector: "Platform"
     };
   }
 
   public componentDidMount() {
-    VideogamesAPI.promiseAll().then(function (videogames) {
-      this.setState({
-        videogames: videogames,
-        loaded: true
-      });
-    }.bind(this));
+    this.loadAll();
   }
 
   @autobind
-  public onFilterChange(event) {
-    var filterId = event.target.name,
+  protected loadAll() {
+    var me = this;
+    me.setLoading(true);
+    VideogamesAPI.promiseAll().then(function (videogames) {
+      me.state.videogames = videogames;
+      me.setLoading(false);
+    });
+  }
+
+  @autobind
+  protected onFilterChange(event) {
+    var me = this,
+      filterId = event.target.name,
       filter = event.target.value;
 
-    this.updateFilterState(filterId, filter);
-    this.setLoading(true);
+    me.updateFilterState(filterId, filter);
+    me.setLoading(true);
 
     var promise = filter && filterId
       ? VideogamesAPI.promiseFindByFilter(filterId, filter)
       : VideogamesAPI.promiseAll();
 
     promise.then(function (videogames) {
-      this.state.videogames = videogames;
-      this.setLoading(false);
-    }.bind(this))
+      me.state.videogames = videogames;
+      me.setLoading(false);
+    });
   }
 
   private updateFilterState(filterId, filter) {
@@ -101,13 +117,13 @@ export default class VideogamesPage extends React.Component<Props, State> {
   }
 
   @autobind
-  public setLoading(enabled) {
+  protected setLoading(enabled) {
     this.state.loaded = !enabled;
     this.forceUpdate();
   }
 
- //TODO refactor DebounceInputs (loop through collection)
- public render() {
+  //TODO refactor DebounceInputs (loop through collection)
+  public render() {
     return (
       <div className="charts-page">
         <div className="main-container">

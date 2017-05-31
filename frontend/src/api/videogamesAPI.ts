@@ -23,7 +23,21 @@ class VideogamesAPI {
 
   promiseGroupByGenre() {
     var url = '{root}/group/genre'.replace('{root}', this.rootPath);
-    return this.resolveGetPromise(url);
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: url,
+        dataType: "jsonp",
+        success: function (data) {
+          var videogames: Array<VideogameEntity>;
+          videogames = data.map((videogame) => {
+            debugger
+            videogame.Genre = videogame._id;
+            return new VideogameEntity(<VideogameEntity>videogame);
+          });
+          resolve(videogames);
+        }
+      });
+    });
   };
 
   resolveGetPromise(url) {

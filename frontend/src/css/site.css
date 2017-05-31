@@ -70,3 +70,10 @@
     display: flex;
     flex-wrap: wrap;
 }
+
+.image-button {
+    width: 45%;
+    border-radius:10px;
+    margin-top: 25px;
+    margin-right: 10px;
+}

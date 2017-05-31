@@ -5,31 +5,8 @@ var PChart = require('react-d3-tooltip').PieTooltip;
 
 //TODO replace mocked data with real info
 
-var data = [
-  {
-    Genre: 'Action',
-    Global_Sales: 4
-  },
-  {
-    Genre: 'Adventure',
-    Global_Sales: 8
-  },
-    {
-    Genre: 'Fighting',
-    Global_Sales: 3
-  },
-    {
-    Genre: 'Misc',
-    Global_Sales: 5
-  },
-    {
-    Genre: 'Platform',
-    Global_Sales: 2
-  }
-]
-
-var width = 700,
-  height = 400,
+var width = 1000,
+  height = 700,
   value = function (d) {
     return +d.Global_Sales;
   },
@@ -68,9 +45,9 @@ interface Props extends React.Props<LineChart> {
 export default class LineChart extends React.Component<Props, {}> {
   public render() {
     return (
-      <div className="line-chart">
+      <div className="pie-chart">
         <PChart
-          data={data}
+          data={this.props.videogames}
           width={width}
           height={height}
           chartSeries={chartSeries}
