@@ -56,7 +56,10 @@ exports.groupByPlatform = function (req, response) {
         [{
             "$group": {
                 _id: "$Platform",
-                Global_Sales: { "$sum": "$Global_Sales" }
+                Global_Sales: { "$sum": "$Global_Sales" },
+                NA_Sales: { "$sum": "$NA_Sales" },
+                EU_Sales: { "$sum": "$EU_Sales" },
+                JP_Sales: { "$sum": "$JP_Sales" }
             }
         }],
         function (error, videogames) {
@@ -69,7 +72,10 @@ exports.groupByPublisher = function (req, response) {
         [{
             "$group": {
                 _id: "$Publisher",
-                Global_Sales: { "$sum": "$Global_Sales" }
+                Global_Sales: { "$sum": "$Global_Sales" },
+                NA_Sales: { "$sum": "$NA_Sales" },
+                EU_Sales: { "$sum": "$EU_Sales" },
+                JP_Sales: { "$sum": "$JP_Sales" }
             }
         }],
         function (error, videogames) {
@@ -82,9 +88,32 @@ exports.groupByGenre = function (req, response) {
         [{
             "$group": {
                 _id: "$Genre",
-                Global_Sales: { "$sum": "$Global_Sales" }
+                Global_Sales: { "$sum": "$Global_Sales" },
+                NA_Sales: { "$sum": "$NA_Sales" },
+                EU_Sales: { "$sum": "$EU_Sales" },
+                JP_Sales: { "$sum": "$JP_Sales" }
             }
         }],
+        function (error, videogames) {
+            handler.handleResponse(response, videogames, error);
+        });
+}
+
+exports.groupByYear = function (req, response) {
+    Videogame.aggregate(
+        [
+            { $match : { Year : { "$ne" : "N/A"} } }, 
+            {
+                "$group": {
+                    _id: "$Year",
+                    Global_Sales: { "$sum": "$Global_Sales" },
+                    NA_Sales: { "$sum": "$NA_Sales" },
+                    EU_Sales: { "$sum": "$EU_Sales" },
+                    JP_Sales: { "$sum": "$JP_Sales" }
+                }
+            },
+            { "$sort": { "_id": 1 } }
+        ],
         function (error, videogames) {
             handler.handleResponse(response, videogames, error);
         });

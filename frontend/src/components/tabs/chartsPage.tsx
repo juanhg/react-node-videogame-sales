@@ -1,7 +1,7 @@
 import * as React from 'react';
 import VideogameEntity from '../../entities/videogameEntity';
-import VideogamesAPI from '../../api/videogamesAPI';
 import VideogamesTable from '../common/videogamesTable';
+import VideogamesService from '../../services/videogamesService';
 import LineChart from '../charts/lineChart';
 import BarGroupChart from '../charts/barGroupChart';
 import PieChart from '../charts/pieChart';
@@ -13,6 +13,7 @@ var autobind = require('autobind-decorator'),
   logo = require('../../../resources/images/logo.png'),
   basicImage = require('../../../resources/images/basic-charts.png'),
   pieImage = require('../../../resources/images/pie-chart.png'),
+  barImage = require('../../../resources/images/bar-chart.png'),
   Loader = require('react-loader'),
   DebounceInput = require('react-debounce-input'),
   Select = require('react-select');
@@ -29,49 +30,74 @@ export default class ChartsPage extends VideoGamesPage {
 
   @autobind
   private onGroupSelectedChange(val) {
-    this.state.groupSelector = val.value;
-    this.forceUpdate();
+    var me = this,
+      group = val.value;
+
+    me.state.groupSelector = group;
+    me.forceUpdate();
+    me.loadSelectedGroup();
   }
 
   @autobind
-  private showBasicChart() {
-    this.state.selectedChart = "Basic";
-    this.loadAll();
+  private showLineChart() {
+    this.state.selectedChart = "Line";
+    this.loadGroup("year");
+  }
+
+  @autobind
+  private showBarChart() {
+    this.state.selectedChart = "Bar";
+    this.loadSelectedGroup();
   }
 
   @autobind
   private showPieChart() {
+    this.state.selectedChart = "Pie";
+    this.loadSelectedGroup();
+  }
+
+  private loadGroup(group: string) {
     var me = this;
-    me.state.selectedChart = "Pie";
+
     me.setLoading(true);
-    VideogamesAPI.promiseGroupByGenre().then(function (groups) {
+    VideogamesService.promiseGroupBy(group).then(function (groups) {
       me.state.groups = groups;
+      debugger
       me.setLoading(false);
     });
+  }
+
+  private loadSelectedGroup() {
+    var me = this,
+      group = me.state.groupSelector;
+    me.loadGroup(group);
   }
 
   @autobind
   private getChartContainer() {
     switch (this.state.selectedChart) {
-      case "Basic":
+      case "Line":
         return (
           <div className="charts-container">
             <LineChart
-              videogames={this.state.videogames}
-              number={20} />
+              groups={this.state.groups}/>
+          </div>);
+      case "Bar":
+        return (
+          <div className="charts-container">
             <BarGroupChart
-              videogames={this.state.videogames}
-              number={3} />
+              groups={this.state.groups}
+              number={10} />
           </div>);
       case "Pie":
         return (
           <div className="charts-container">
-            <PieChart 
-             groups={this.state.groups}
-             number={3} />
+            <PieChart
+              groups={this.state.groups}
+              max={40} />
           </div>)
-      default: 
-          return <div className="charts-container"/>
+      default:
+        return <div className="charts-container" />
     }
   }
 
@@ -98,10 +124,13 @@ export default class ChartsPage extends VideoGamesPage {
 
             <input className="image-button" type="image"
               src={basicImage}
-              onClick={this.showBasicChart} />
+              onClick={this.showLineChart} />
             <input className="image-button" type="image"
               src={pieImage}
               onClick={this.showPieChart} />
+            <input className="image-button" type="image"
+              src={barImage}
+              onClick={this.showBarChart} />
 
             <div className="shape-block">
               <img className="shape" src={logo} />

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router';
 
 import VideogameEntity from '../../entities/videogameEntity';
-import VideogamesAPI from '../../api/videogamesAPI';
+import VideogamesService from '../../services/videogamesService';
 import VideogamesTable from '../common/videogamesTable';
 import GroupEntity from '../../entities/GroupEntity';
 
@@ -45,7 +45,7 @@ export default class VideogamesPage extends React.Component<Props, State> {
       loaded: false,
       salesByGenre: [],
       selector: "one",
-      selectedChart: "Basic",
+      selectedChart: "Line",
       groupSelector: "Platform"
     };
   }
@@ -58,7 +58,7 @@ export default class VideogamesPage extends React.Component<Props, State> {
   protected loadAll() {
     var me = this;
     me.setLoading(true);
-    VideogamesAPI.promiseAll().then(function (videogames) {
+    VideogamesService.promiseAll().then(function (videogames) {
       me.state.videogames = videogames;
       me.setLoading(false);
     });
@@ -74,8 +74,8 @@ export default class VideogamesPage extends React.Component<Props, State> {
     me.setLoading(true);
 
     var promise = filter && filterId
-      ? VideogamesAPI.promiseFindByFilter(filterId, filter)
-      : VideogamesAPI.promiseAll();
+      ? VideogamesService.promiseFindByFilter(filterId, filter)
+      : VideogamesService.promiseAll();
 
     promise.then(function (videogames) {
       me.state.videogames = videogames;

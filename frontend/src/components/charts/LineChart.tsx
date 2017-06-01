@@ -1,25 +1,15 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import VideogameEntity from '../../entities/videogameEntity';
+import GroupEntity from '../../entities/groupEntity';
+
 var LChart = require('react-d3-tooltip').LineTooltip;
 
-var width = 700,
-  height = 300,
+var width = 1400,
+  height = 700,
   margins = { left: 100, right: 100, top: 50, bottom: 50 },
   title = "Videogames Sales",
   chartSeries = [
-    {
-      field: 'NA_Sales',
-      name: 'North America sales',
-    },
-    {
-      field: 'EU_Sales',
-      name: 'Europe sales',
-    },
-    {
-      field: 'JP_Sales',
-      name: 'Japan sales',
-    },
     {
       field: 'Global_Sales',
       name: 'Sales',
@@ -27,11 +17,12 @@ var width = 700,
   ],
   // your x accessor
   x = function (d) {
-    return d.Rank;
-  }
+    return d._id;
+  },
+    xScale = 'ordinal';
 
 interface Props extends React.Props<LineChart> {
-  videogames: Array<VideogameEntity>,
+  groups: Array<GroupEntity>,
   number?: number
 }
 
@@ -43,12 +34,13 @@ export default class LineChart extends React.Component<Props, {}> {
           margins={margins}
           title={title}
           data={this.props.number
-            ? this.props.videogames.slice(0, this.props.number)
-            : this.props.videogames}
+            ? this.props.groups.slice(0, this.props.number)
+            : this.props.groups}
           width={width}
           height={height}
           chartSeries={chartSeries}
           x={x}
+          xScale={xScale}
         />
       </div>
     );

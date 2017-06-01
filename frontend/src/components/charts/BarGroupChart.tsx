@@ -1,10 +1,13 @@
 import * as React from 'react';
 import { Link } from 'react-router';
 import VideogameEntity from '../../entities/videogameEntity';
+import GroupEntity from '../../entities/groupEntity';
+
 var BGChart = require('react-d3-tooltip').BarGroupTooltip;
 
-var width = 700,
-  height = 400,
+
+var width = 1400,
+  height = 700,
   title = "Videogames Sales",
   chartSeries = [
     {
@@ -26,7 +29,7 @@ var width = 700,
 
   ],
   x = function (d) {
-    return d.Name;
+    return d._id;
   },
   xScale = 'ordinal',
   xLabel = 'Games',
@@ -34,7 +37,7 @@ var width = 700,
 
 
 interface Props extends React.Props<BarGroupChart> {
-  videogames: Array<VideogameEntity>,
+  groups: Array<GroupEntity>,
   number?: number
 }
 
@@ -45,8 +48,8 @@ export default class BarGroupChart extends React.Component<Props, {}> {
         <BGChart
           title={title}
           data={this.props.number 
-          ? this.props.videogames.slice(0, this.props.number) 
-          : this.props.videogames }
+          ? this.props.groups.slice(0, this.props.number) 
+          : this.props.groups }
           width={width}
           height={height}
           chartSeries={chartSeries}

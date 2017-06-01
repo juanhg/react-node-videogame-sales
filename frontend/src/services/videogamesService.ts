@@ -9,11 +9,11 @@ class VideogamesAPI {
 
   private rootPath = 'http://localhost:3000/videogames';
 
-  promiseAll() {
+  public promiseAll(): Promise<VideogameEntity[]> {
     return this.resolveGetPromise(this.rootPath);
   };
 
-  promiseFindByFilter(filterId, filter) {
+  public promiseFindByFilter(filterId, filter): Promise<VideogameEntity[]> {
     var url = '{root}/{filterId}/{filter}'
       .replace('{root}', this.rootPath)
       .replace('{filterId}', filterId.toLowerCase())
@@ -22,7 +22,7 @@ class VideogamesAPI {
     return this.resolveGetPromise(url);
   };
 
-  promiseGroupByGenre(): Promise<GroupEntity[]> {
+  public promiseGroupByGenre(): Promise<GroupEntity[]> {
     var url = '{root}/group/genre'.replace('{root}', this.rootPath);
     return new Promise((resolve, reject) => {
       $.ajax({
@@ -39,7 +39,27 @@ class VideogamesAPI {
     });
   };
 
-  resolveGetPromise(url): Promise<VideogameEntity[]> {
+  public promiseGroupBy(fieldId: string): Promise<GroupEntity[]> {
+    var url = '{root}/group/{fieldId}'
+      .replace('{root}', this.rootPath)
+      .replace('{fieldId}', fieldId.toLowerCase())
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: url,
+        dataType: "jsonp",
+        success: function (data) {
+          var groups: Array<GroupEntity>;
+          groups = data.map((groups) => {
+            return <GroupEntity>groups;
+          });
+          resolve(groups);
+        }
+      });
+    });
+  };
+
+  public resolveGetPromise(url): Promise<VideogameEntity[]> {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: url,
@@ -54,7 +74,6 @@ class VideogamesAPI {
       });
     });
   }
-
 }
 
 export default new VideogamesAPI();

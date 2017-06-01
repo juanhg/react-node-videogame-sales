@@ -13,14 +13,15 @@ var width = 1100,
 
 interface Props extends React.Props<PieChart> {
   groups: Array<GroupEntity>,
-  number?: number
+  max?: number
 }
 
 export default class PieChart extends React.Component<Props, {}> {
 
   @autobind
   private getChartSeries(){
-    return this.props.groups.map((group, index) => { 
+    var groups = this.props.groups.slice(0, this.props.max);
+    return groups.map((group, index) => { 
       return {
         field: group._id,
         name: group._id

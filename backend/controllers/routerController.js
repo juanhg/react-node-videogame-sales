@@ -30,4 +30,6 @@ addVideogameRoutes = function (router) {
         .get(VideogamesController.groupByPublisher)
     router.route('/videogames/group/genre')
         .get(VideogamesController.groupByGenre)
+    router.route('/videogames/group/year')
+        .get(VideogamesController.groupByYear)
 };
