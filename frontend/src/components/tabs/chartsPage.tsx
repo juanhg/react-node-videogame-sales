@@ -23,7 +23,7 @@ var options = [
   { value: 'Publisher', label: 'Publisher' }
 ];
 
-interface Props extends React.Props<ChartsPage> { }
+interface Props extends React.Props<ChartsPage> { };
 
 export default class ChartsPage extends VideoGamesPage {
 
@@ -44,8 +44,8 @@ export default class ChartsPage extends VideoGamesPage {
     var me = this;
     me.state.selectedChart = "Pie";
     me.setLoading(true);
-    VideogamesAPI.promiseGroupByGenre().then(function (videogames) {
-      me.state.videogames = videogames;
+    VideogamesAPI.promiseGroupByGenre().then(function (groups) {
+      me.state.groups = groups;
       me.setLoading(false);
     });
   }
@@ -66,9 +66,9 @@ export default class ChartsPage extends VideoGamesPage {
       case "Pie":
         return (
           <div className="charts-container">
-            <PieChart
-              videogames={this.state.videogames}
-              number={3} />
+            <PieChart 
+             groups={this.state.groups}
+             number={3} />
           </div>)
       default: 
           return <div className="charts-container"/>

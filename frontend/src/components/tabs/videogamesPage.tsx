@@ -4,6 +4,8 @@ import { Link } from 'react-router';
 import VideogameEntity from '../../entities/videogameEntity';
 import VideogamesAPI from '../../api/videogamesAPI';
 import VideogamesTable from '../common/videogamesTable';
+import GroupEntity from '../../entities/GroupEntity';
+
 import Toogle from '../common/toogle';
 
 var Loader = require('react-loader'),
@@ -21,6 +23,7 @@ interface State {
   genreFilter: string,
   publisherFilter: string,
   videogames: Array<VideogameEntity>,
+  groups: Array<GroupEntity>,
   loaded: boolean,
   salesByGenre: Array<VideogameEntity>,
   selector: string,
@@ -38,6 +41,7 @@ export default class VideogamesPage extends React.Component<Props, State> {
       genreFilter: "",
       publisherFilter: "",
       videogames: [],
+      groups: [],
       loaded: false,
       salesByGenre: [],
       selector: "one",

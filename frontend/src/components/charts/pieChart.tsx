@@ -1,58 +1,51 @@
 import * as React from 'react';
 import { Link } from 'react-router';
-import VideogameEntity from '../../entities/videogameEntity';
-var PChart = require('react-d3-tooltip').PieTooltip;
+import GroupEntity from '../../entities/groupEntity';
+
+var PChart = require('react-d3-tooltip').PieTooltip,
+    autobind = require('autobind-decorator');
+
 
 //TODO replace mocked data with real info
 
-var width = 1000,
-  height = 700,
-  value = function (d) {
-    return +d.Global_Sales;
-  },
-  name = function (d) {
-    return d.Genre;
-  },
-  chartSeries = [
-    {
-      "field": "Action",
-      "name": "Action"
-    },
-    {
-      "field": "Adventure",
-      "name": "Adventure"
-    },
-    {
-      "field": "Fighting",
-      "name": "Fighting"
-    },
-        {
-      "field": "Misc",
-      "name": "Misc"
-    },    {
-      "field": "Platform",
-      "name": "Platform"
-    },
-  ];
+var width = 1100,
+  height = 700;
 
-
-
-interface Props extends React.Props<LineChart> {
-  videogames: Array<VideogameEntity>,
+interface Props extends React.Props<PieChart> {
+  groups: Array<GroupEntity>,
   number?: number
 }
 
-export default class LineChart extends React.Component<Props, {}> {
+export default class PieChart extends React.Component<Props, {}> {
+
+  @autobind
+  private getChartSeries(){
+    return this.props.groups.map((group, index) => { 
+      return {
+        field: group._id,
+        name: group._id
+      }
+    });
+  }
+
+  private getName(group){
+    return group._id;
+  }
+
+  private getValue(group){
+    return +group.Global_Sales;
+  }
+
   public render() {
     return (
       <div className="pie-chart">
         <PChart
-          data={this.props.videogames}
+          data={this.props.groups}
           width={width}
           height={height}
-          chartSeries={chartSeries}
-          value={value}
-          name={name}
+          chartSeries={this.getChartSeries()}
+          value={this.getValue}
+          name={this.getName}
         />
       </div>
     );

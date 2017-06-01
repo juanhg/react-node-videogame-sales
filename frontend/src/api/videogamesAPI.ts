@@ -1,6 +1,7 @@
 import * as $ from 'jquery';
 import * as Q from 'q';
 import VideogameEntity from '../entities/videogameEntity';
+import GroupEntity from '../entities/groupEntity';
 
 var Promise = require('es6-promise');
 
@@ -21,26 +22,24 @@ class VideogamesAPI {
     return this.resolveGetPromise(url);
   };
 
-  promiseGroupByGenre() {
+  promiseGroupByGenre(): Promise<GroupEntity[]> {
     var url = '{root}/group/genre'.replace('{root}', this.rootPath);
     return new Promise((resolve, reject) => {
       $.ajax({
         url: url,
         dataType: "jsonp",
         success: function (data) {
-          var videogames: Array<VideogameEntity>;
-          videogames = data.map((videogame) => {
-            debugger
-            videogame.Genre = videogame._id;
-            return new VideogameEntity(<VideogameEntity>videogame);
+          var groups: Array<GroupEntity>;
+          groups = data.map((groups) => {
+            return <GroupEntity>groups;
           });
-          resolve(videogames);
+          resolve(groups);
         }
       });
     });
   };
 
-  resolveGetPromise(url) {
+  resolveGetPromise(url): Promise<VideogameEntity[]> {
     return new Promise((resolve, reject) => {
       $.ajax({
         url: url,
@@ -48,7 +47,7 @@ class VideogamesAPI {
         success: function (data) {
           var videogames: Array<VideogameEntity>;
           videogames = data.map((videogame) => {
-            return new VideogameEntity(<VideogameEntity>videogame);
+            return <VideogameEntity>videogame;
           });
           resolve(videogames);
         }
