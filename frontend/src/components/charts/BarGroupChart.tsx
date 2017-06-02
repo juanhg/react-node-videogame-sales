@@ -5,7 +5,6 @@ import GroupEntity from '../../entities/groupEntity';
 
 var BGChart = require('react-d3-tooltip').BarGroupTooltip;
 
-
 var width = 1400,
   height = 700,
   title = "Videogames Sales",

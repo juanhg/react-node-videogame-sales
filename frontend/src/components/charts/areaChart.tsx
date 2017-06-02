@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import VideogameEntity from '../../entities/videogameEntity';
 import GroupEntity from '../../entities/groupEntity';
 
-var LChart = require('react-d3-tooltip').LineTooltip;
+var AChart = require('react-d3-tooltip').AreaStackTooltip;
 
 var width = 1400,
   height = 700,
@@ -42,7 +42,7 @@ export default class LineChart extends React.Component<Props, {}> {
   public render() {
     return (
       <div className="line-chart">
-        <LChart
+        <AChart
           margins={margins}
           title={title}
           data={this.props.number

@@ -52,57 +52,73 @@ exports.findByGenre = function (req, response) {
 }
 
 exports.groupByPlatform = function (req, response) {
+    var filter = req.params.filter ? req.params.filter.toString() : "";
+
+    console.log(filter)
     Videogame.aggregate(
-        [{
-            "$group": {
-                _id: "$Platform",
-                Global_Sales: { "$sum": "$Global_Sales" },
-                NA_Sales: { "$sum": "$NA_Sales" },
-                EU_Sales: { "$sum": "$EU_Sales" },
-                JP_Sales: { "$sum": "$JP_Sales" }
-            }
-        }],
+        [
+            { $match: { "Name": { "$regex": filter.toString(), "$options": "i" } } },
+            {
+                "$group": {
+                    _id: "$Platform",
+                    Global_Sales: { "$sum": "$Global_Sales" },
+                    NA_Sales: { "$sum": "$NA_Sales" },
+                    EU_Sales: { "$sum": "$EU_Sales" },
+                    JP_Sales: { "$sum": "$JP_Sales" }
+                }
+            }],
         function (error, videogames) {
             handler.handleResponse(response, videogames, error);
         });
 }
 
 exports.groupByPublisher = function (req, response) {
+    var filter = req.params.filter ? req.params.filter.toString() : "";
+
     Videogame.aggregate(
-        [{
-            "$group": {
-                _id: "$Publisher",
-                Global_Sales: { "$sum": "$Global_Sales" },
-                NA_Sales: { "$sum": "$NA_Sales" },
-                EU_Sales: { "$sum": "$EU_Sales" },
-                JP_Sales: { "$sum": "$JP_Sales" }
-            }
-        }],
+        [
+            { $match: { "Name": { "$regex": filter.toString(), "$options": "i" } } },
+            {
+                "$group": {
+                    _id: "$Publisher",
+                    Global_Sales: { "$sum": "$Global_Sales" },
+                    NA_Sales: { "$sum": "$NA_Sales" },
+                    EU_Sales: { "$sum": "$EU_Sales" },
+                    JP_Sales: { "$sum": "$JP_Sales" }
+                }
+            }],
         function (error, videogames) {
             handler.handleResponse(response, videogames, error);
         });
 }
 
 exports.groupByGenre = function (req, response) {
+    var filter = req.params.filter ? req.params.filter.toString() : "";
+
     Videogame.aggregate(
-        [{
-            "$group": {
-                _id: "$Genre",
-                Global_Sales: { "$sum": "$Global_Sales" },
-                NA_Sales: { "$sum": "$NA_Sales" },
-                EU_Sales: { "$sum": "$EU_Sales" },
-                JP_Sales: { "$sum": "$JP_Sales" }
-            }
-        }],
+        [
+            { $match: { "Name": { "$regex": filter.toString(), "$options": "i" } } },
+            {
+                "$group": {
+                    _id: "$Genre",
+                    Global_Sales: { "$sum": "$Global_Sales" },
+                    NA_Sales: { "$sum": "$NA_Sales" },
+                    EU_Sales: { "$sum": "$EU_Sales" },
+                    JP_Sales: { "$sum": "$JP_Sales" }
+                }
+            }],
         function (error, videogames) {
             handler.handleResponse(response, videogames, error);
         });
 }
 
 exports.groupByYear = function (req, response) {
+    var filter = req.params.filter ? req.params.filter.toString() : "";
+
     Videogame.aggregate(
         [
-            { $match : { Year : { "$ne" : "N/A"} } }, 
+            { $match: { "Name": { "$regex": filter.toString(), "$options": "i" } } },
+            { $match: { Year: { "$ne": "N/A" } } },
             {
                 "$group": {
                     _id: "$Year",

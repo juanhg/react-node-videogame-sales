@@ -3,6 +3,7 @@ import VideogameEntity from '../../entities/videogameEntity';
 import VideogamesTable from '../common/videogamesTable';
 import VideogamesService from '../../services/videogamesService';
 import LineChart from '../charts/lineChart';
+import AreaChart from '../charts/areaChart';
 import BarGroupChart from '../charts/barGroupChart';
 import PieChart from '../charts/pieChart';
 import VideoGamesPage from './videogamesPage';
@@ -12,6 +13,7 @@ import 'react-select/dist/react-select.css';
 var autobind = require('autobind-decorator'),
   logo = require('../../../resources/images/logo.png'),
   basicImage = require('../../../resources/images/basic-charts.png'),
+  areaImage = require('../../../resources/images/area-chart.png'),
   pieImage = require('../../../resources/images/pie-chart.png'),
   barImage = require('../../../resources/images/bar-chart.png'),
   Loader = require('react-loader'),
@@ -45,6 +47,12 @@ export default class ChartsPage extends VideoGamesPage {
   }
 
   @autobind
+  private showAreaChart() {
+    this.state.selectedChart = "Area";
+    this.loadGroup("year");
+  }
+
+  @autobind
   private showBarChart() {
     this.state.selectedChart = "Bar";
     this.loadSelectedGroup();
@@ -62,9 +70,12 @@ export default class ChartsPage extends VideoGamesPage {
     me.setLoading(true);
     VideogamesService.promiseGroupBy(group).then(function (groups) {
       me.state.groups = groups;
-      debugger
       me.setLoading(false);
     });
+  }
+
+  public componentDidMount() {
+    this.loadGroup("year");
   }
 
   private loadSelectedGroup() {
@@ -80,7 +91,13 @@ export default class ChartsPage extends VideoGamesPage {
         return (
           <div className="charts-container">
             <LineChart
-              groups={this.state.groups}/>
+              groups={this.state.groups} />
+          </div>);
+      case "Area":
+        return (
+          <div className="charts-container">
+            <AreaChart
+              groups={this.state.groups} />
           </div>);
       case "Bar":
         return (
@@ -98,6 +115,28 @@ export default class ChartsPage extends VideoGamesPage {
           </div>)
       default:
         return <div className="charts-container" />
+    }
+  }
+
+  @autobind
+  protected onFilterChange(event) {
+    var me = this,
+      filterId = event.target.name,
+      filter = event.target.value,
+      group = this.state.selectedChart === 'Line' || this.state.selectedChart === 'Area'
+        ? 'year'
+        : this.state.groupSelector;
+
+    me.state.nameFilter = filter;
+    me.setLoading(true);
+
+    if (!filter)
+      this.loadSelectedGroup();
+    else {
+      VideogamesService.promiseGroupByWithFilter(group, filter).then(function (groups) {
+        me.state.groups = groups;
+        me.setLoading(false);
+      });
     }
   }
 
@@ -125,6 +164,9 @@ export default class ChartsPage extends VideoGamesPage {
             <input className="image-button" type="image"
               src={basicImage}
               onClick={this.showLineChart} />
+            <input className="image-button" type="image"
+              src={areaImage}
+              onClick={this.showAreaChart} />
             <input className="image-button" type="image"
               src={pieImage}
               onClick={this.showPieChart} />

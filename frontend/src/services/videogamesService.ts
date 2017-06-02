@@ -59,6 +59,28 @@ class VideogamesAPI {
     });
   };
 
+    public promiseGroupByWithFilter(fieldId: string, filter: string): Promise<GroupEntity[]> {
+    var url = '{root}/group/{fieldId}/{filter}'
+      .replace('{root}', this.rootPath)
+      .replace('{fieldId}', fieldId.toLowerCase())
+      .replace('{filter}', filter);
+
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: url,
+        dataType: "jsonp",
+        success: function (data) {
+          var groups: Array<GroupEntity>;
+          groups = data.map((groups) => {
+            return <GroupEntity>groups;
+          });
+          resolve(groups);
+        }
+      });
+    });
+  };
+
+
   public resolveGetPromise(url): Promise<VideogameEntity[]> {
     return new Promise((resolve, reject) => {
       $.ajax({
