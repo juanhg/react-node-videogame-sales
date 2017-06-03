@@ -6,8 +6,9 @@ import LineChart from '../charts/lineChart';
 import AreaChart from '../charts/areaChart';
 import BarGroupChart from '../charts/barGroupChart';
 import PieChart from '../charts/pieChart';
-import RoundedRect from '../d3/roundedRectangles';
 import BubbleChart from '../d3/bubbleChart';
+import RoundedRect from '../d3/roundedRectangles';
+import Waves from '../d3/waves';
 
 import VideoGamesPage from './videogamesPage';
 import 'react-select/dist/react-select.css';
@@ -19,6 +20,7 @@ var autobind = require('autobind-decorator'),
   areaImage = require('../../../resources/images/area-chart.png'),
   pieImage = require('../../../resources/images/pie-chart.png'),
   barImage = require('../../../resources/images/bar-chart.png'),
+  waveImage = require('../../../resources/images/waves.png'),
   roundedRectanglesImage = require('../../../resources/images/rounded-rectangles.png'),
   bubbleImage = require('../../../resources/images/bubble-chart.png'),
   Loader = require('react-loader'),
@@ -56,17 +58,25 @@ export default class ChartsPage extends VideoGamesPage {
               debounceTimeout={300}
               onChange={this.onFilterChange} />
 
+            <div className="chart-buttons-container">
 
-            {
-              this.getImageButtonAttributes().map((attr) =>
-                <input className="image-button" type="image"
-                  src={attr.src}
-                  onClick={attr.onclick} />
-              )
-            }
+              {
+                this.getImageButtonAttributes().map((attr) =>
+                  <input className="image-button" type="image"
+                    src={attr.src}
+                    onClick={attr.onclick} />
+                )
+              }
+            </div>
 
-            <div className="shape-block">
-              <img className="shape" src={logo} />
+            <div className="experiment-buttons-container">
+              {
+                this.getExperimentalImageButtonAttributes().map((attr) =>
+                  <input className="image-button" type="image"
+                    src={attr.src}
+                    onClick={attr.onclick} />
+                )
+              }
             </div>
           </div>
           <div className="right-container">
@@ -105,10 +115,21 @@ export default class ChartsPage extends VideoGamesPage {
       {
         src: bubbleImage,
         onclick: me.showBubbleChart
-      },
+      }
+    ]
+  }
+
+
+  private getExperimentalImageButtonAttributes() {
+    var me = this;
+    return [
       {
         src: roundedRectanglesImage,
         onclick: me.showRoundedRectangles,
+      },
+      {
+        src: waveImage,
+        onclick: me.showWaves,
       },
     ]
   }
@@ -150,6 +171,12 @@ export default class ChartsPage extends VideoGamesPage {
   @autobind
   private showRoundedRectangles() {
     this.state.selectedChart = "RoundedRectangles";
+    this.forceUpdate();
+  }
+
+  @autobind
+  private showWaves() {
+    this.state.selectedChart = "Waves";
     this.forceUpdate();
   }
 
@@ -214,6 +241,11 @@ export default class ChartsPage extends VideoGamesPage {
           <div className="charts-container">
             <BubbleChart
               groups={this.state.groups} />
+          </div>)
+      case "Waves":
+        return (
+          <div className="charts-container">
+            <Waves />
           </div>)
       default:
         return <div className="charts-container" />
