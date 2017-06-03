@@ -6,6 +6,9 @@ import LineChart from '../charts/lineChart';
 import AreaChart from '../charts/areaChart';
 import BarGroupChart from '../charts/barGroupChart';
 import PieChart from '../charts/pieChart';
+import RoundedRect from '../d3/roundedRectangles';
+import BubbleChart from '../d3/bubbleChart';
+
 import VideoGamesPage from './videogamesPage';
 import 'react-select/dist/react-select.css';
 
@@ -16,6 +19,8 @@ var autobind = require('autobind-decorator'),
   areaImage = require('../../../resources/images/area-chart.png'),
   pieImage = require('../../../resources/images/pie-chart.png'),
   barImage = require('../../../resources/images/bar-chart.png'),
+  roundedRectanglesImage = require('../../../resources/images/rounded-rectangles.png'),
+  bubbleImage = require('../../../resources/images/bubble-chart.png'),
   Loader = require('react-loader'),
   DebounceInput = require('react-debounce-input'),
   Select = require('react-select');
@@ -29,6 +34,84 @@ var options = [
 interface Props extends React.Props<ChartsPage> { };
 
 export default class ChartsPage extends VideoGamesPage {
+
+
+  public render() {
+    return (
+      <div className="charts-page">
+        <div className="main-container">
+          <div className="left-container">
+            <Select
+              name="form-field-name"
+              value={this.state.groupSelector}
+              options={options}
+              onChange={this.onGroupSelectedChange}
+            />
+            <DebounceInput
+              className="form-control videogames-filter"
+              placeholder="Filter by Name"
+              name="Name"
+              value={this.state.nameFilter}
+              minLength={2}
+              debounceTimeout={300}
+              onChange={this.onFilterChange} />
+
+
+            {
+              this.getImageButtonAttributes().map((attr) =>
+                <input className="image-button" type="image"
+                  src={attr.src}
+                  onClick={attr.onclick} />
+              )
+            }
+
+            <div className="shape-block">
+              <img className="shape" src={logo} />
+            </div>
+          </div>
+          <div className="right-container">
+            <Loader loaded={this.state.loaded}>
+              {this.getChartContainer()}
+            </Loader>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  public componentDidMount() {
+    this.loadGroup("year");
+  }
+
+  private getImageButtonAttributes() {
+    var me = this;
+    return [
+      {
+        src: basicImage,
+        onclick: me.showLineChart,
+      },
+      {
+        src: areaImage,
+        onclick: me.showAreaChart,
+      },
+      {
+        src: pieImage,
+        onclick: me.showPieChart,
+      },
+      {
+        src: barImage,
+        onclick: me.showBarChart,
+      },
+      {
+        src: bubbleImage,
+        onclick: me.showBubbleChart
+      },
+      {
+        src: roundedRectanglesImage,
+        onclick: me.showRoundedRectangles,
+      },
+    ]
+  }
 
   @autobind
   private onGroupSelectedChange(val) {
@@ -64,6 +147,18 @@ export default class ChartsPage extends VideoGamesPage {
     this.loadSelectedGroup();
   }
 
+  @autobind
+  private showRoundedRectangles() {
+    this.state.selectedChart = "RoundedRectangles";
+    this.forceUpdate();
+  }
+
+  @autobind
+  private showBubbleChart() {
+    this.state.selectedChart = "Bubble";
+    this.loadSelectedGroup();
+  }
+
   private loadGroup(group: string) {
     var me = this;
 
@@ -72,10 +167,6 @@ export default class ChartsPage extends VideoGamesPage {
       me.state.groups = groups;
       me.setLoading(false);
     });
-  }
-
-  public componentDidMount() {
-    this.loadGroup("year");
   }
 
   private loadSelectedGroup() {
@@ -113,6 +204,17 @@ export default class ChartsPage extends VideoGamesPage {
               groups={this.state.groups}
               max={40} />
           </div>)
+      case "RoundedRectangles":
+        return (
+          <div className="charts-container">
+            <RoundedRect />
+          </div>)
+      case "Bubble":
+        return (
+          <div className="charts-container">
+            <BubbleChart
+              groups={this.state.groups} />
+          </div>)
       default:
         return <div className="charts-container" />
     }
@@ -138,53 +240,5 @@ export default class ChartsPage extends VideoGamesPage {
         me.setLoading(false);
       });
     }
-  }
-
-  public render() {
-    return (
-      <div className="charts-page">
-        <div className="main-container">
-          <div className="left-container">
-            <Select
-              name="form-field-name"
-              value={this.state.groupSelector}
-              options={options}
-              onChange={this.onGroupSelectedChange}
-            />
-            <DebounceInput
-              className="form-control videogames-filter"
-              placeholder="Filter by Name"
-              name="Name"
-              value={this.state.nameFilter}
-              minLength={2}
-              debounceTimeout={300}
-              onChange={this.onFilterChange} />
-
-
-            <input className="image-button" type="image"
-              src={basicImage}
-              onClick={this.showLineChart} />
-            <input className="image-button" type="image"
-              src={areaImage}
-              onClick={this.showAreaChart} />
-            <input className="image-button" type="image"
-              src={pieImage}
-              onClick={this.showPieChart} />
-            <input className="image-button" type="image"
-              src={barImage}
-              onClick={this.showBarChart} />
-
-            <div className="shape-block">
-              <img className="shape" src={logo} />
-            </div>
-          </div>
-          <div className="right-container">
-            <Loader loaded={this.state.loaded}>
-              {this.getChartContainer()}
-            </Loader>
-          </div>
-        </div>
-      </div>
-    );
   }
 }
