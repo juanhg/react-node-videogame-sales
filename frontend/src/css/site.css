@@ -96,3 +96,14 @@
   fill: none;
   stroke-width: 2.5px;
 }
+
+.author {
+    position: fixed;
+    bottom: 140px;
+    width: 100%;
+    font-family: allerbold, arial, helvetica, sans-serif;
+    font-size: 3.5rem;
+    letter-spacing: -0.025em;
+    font-weight: normal;
+    line-height: 1.1em;
+}

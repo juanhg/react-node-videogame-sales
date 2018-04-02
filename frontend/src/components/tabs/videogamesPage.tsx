@@ -132,6 +132,7 @@ export default class VideogamesPage extends React.Component<Props, State> {
       <div className="charts-page">
         <div className="main-container">
           <div className="left-container">
+            <div className="author">Juan Hernández</div>
             <DebounceInput
               className="form-control videogames-filter"
               placeholder="Filter by Name"

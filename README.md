@@ -1,25 +1,31 @@
 React-Node Videogame Sales
 --------------------------------
 
-REQUIRES
+### Prerequisites
 
-Node.js should be installed in your system.
+* Node.js
 
-MongoDB should be installed in your system.
+* MongoDB
 
 
-INSTALL
+### Installing
 
-Create videogames mongodb collection: mongoimport -d videogamesdb -c videogames --type csv --file vgsales-clean.csv --headerline
+Create videogames mongodb collection: 
+```
+mongo import -d videogamesdb -c videogames --type csv --file vgsales-clean.csv --headerline
+``` 
 
+Install node_modules: 
+``` 
 npm install
+```
 
-RUN 
+## Running
 
-Run mongodb: mongodb
-
-Run the server: node server.js
-
-Run start script: npm start 
-
+Run mongodb, the node server, and the start script: 
+```
+mongod
+node server.js
+npm start 
+```
 Open http://localhost:8080/ in your browser
